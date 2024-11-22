@@ -1,0 +1,47 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+.env/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Pytest cache
+.cache/
+
+# MySQL & SQLite database files
+*.db
+*.sqlite3
+
+# Logs
+*.log
+*.out
+*.err
+
+# Mac-specific files
+.DS_Store
+
+# IDE files
+*.idea/
+.vscode/
