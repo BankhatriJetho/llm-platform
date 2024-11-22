@@ -35,3 +35,11 @@ def validate_and_save_dataset(file_name: str, content: bytes):
         return {"error": str(e)}
 
     return {"message": f"Dataset {file_name} uploaded and validated successfully", "path": file_path}
+
+def delete_dataset(file_name: str):
+    """Delete a dataset by its file name."""
+    file_path = os.path.join(DATA_DIR, file_name)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return {"message": f"Dataset {file_name} deleted successfully"}
+    return {"error": f"Dataset {file_name} not found"}

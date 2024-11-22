@@ -11,8 +11,10 @@ def health_check():
 
 # Dataset routes
 @router.get("/datasets", tags=["datasets"])
-def get_datasets():
-    return {"datasets": dataset_manager.list_datasets()}
+async def list_datasets():
+    datasets = dataset_manager.list_datasets()
+    return {"datasets": datasets}
+
 
 @router.post("/datasets", tags=["datasets"])
 async def upload_dataset(file: UploadFile = File(...)):
@@ -30,3 +32,9 @@ async def fine_tune_model(dataset_name: str = Body(..., embed=True)):
 @router.post("/inference", tags=["inference"])
 async def run_inference(input_text: str = Body(..., embed=True)):
     return inference_engine.run_inference(input_text)
+
+#delete routes
+@router.delete("/datasets", tags=["datasets"])
+async def delete_dataset(file_name: str):
+    result = dataset_manager.delete_dataset(file_name)
+    return result
