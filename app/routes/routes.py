@@ -16,18 +16,8 @@ def get_datasets():
 
 @router.post("/datasets", tags=["datasets"])
 async def upload_dataset(file: UploadFile = File(...)):
-    if file:
-        print(f"Filename: {file.filename}")
-        print(f"Content Type: {file.content_type}")
-        print(f"Headers: {file.headers}")
-        return {
-            "filename": file.filename,
-            "content_type": file.content_type,
-            "headers": file.headers
-        }
-    print("No file received.")
-    return {"error": "No file received"}
-
+    result = dataset_manager.validate_and_save_dataset(file.filename, file.file.read())
+    return result
 
 
 
