@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File, UploadFile
 from app.services import dataset_manager, fine_tuning, inference_engine
 from fastapi import Body
+import os
 
 router = APIRouter()
 
@@ -26,7 +27,12 @@ async def upload_dataset(file: UploadFile = File(...)):
 # Fine-tuning routes
 @router.post("/fine_tune", tags=["fine-tuning"])
 async def fine_tune_model(dataset_name: str = Body(..., embed=True)):
-    return {"message": fine_tuning.fine_tune_model(dataset_name)}
+    dataset_path = f"data/{dataset_name}"
+    if not os.path.exists(dataset_path):
+        return {"error": f"Dataset {dataset_name} not found"}
+    result = fine_tuning.fine_tune_model(dataset_path)
+    return result
+
 
 # Inference routes
 @router.post("/inference", tags=["inference"])
