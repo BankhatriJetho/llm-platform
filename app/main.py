@@ -13,9 +13,10 @@ app.include_router(routes.router)
 def read_root():
     return {"message": "Welcome to the LLM Platform!"}
 
-@app.get("/health")
-def health_check():
+@app.get("/health", tags=["Health"], operation_id="health_status")
+async def health_check():
     return {"status": "healthy"}
+
 
 # Register routes
 app.include_router(datasets.router, prefix="/api")
