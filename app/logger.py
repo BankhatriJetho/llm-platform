@@ -1,23 +1,33 @@
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 
-# Create a logger
-logger = logging.getLogger("app_logger")
-logger.setLevel(logging.INFO)  # You can switch to DEBUG for more detailed logs
+# Create a logs directory if it doesn't exist
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
 
-# Create a file handler for logging (rotates when the file reaches 1MB, keeps 5 backups)
-file_handler = RotatingFileHandler("app_logs.log", maxBytes=1_000_000, backupCount=5)
-file_handler.setLevel(logging.INFO)
+# Log file path
+LOG_FILE = os.path.join(LOG_DIR, "app.log")
 
-# Create a console handler for debugging purposes
+# Create a custom logger
+logger = logging.getLogger("LLMPlatform")
+logger.setLevel(logging.DEBUG)  # Set the default logging level
+
+# Create handlers
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
+file_handler = RotatingFileHandler(LOG_FILE, maxBytes=5 * 1024 * 1024, backupCount=5)  # 5MB per file, 5 backups
 
-# Define a logging format
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-file_handler.setFormatter(formatter)
+# Set logging level for handlers
+console_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.DEBUG)
+
+# Create a logging format
+formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 console_handler.setFormatter(formatter)
+file_handler.setFormatter(formatter)
 
 # Add handlers to the logger
-logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(file_handler)
