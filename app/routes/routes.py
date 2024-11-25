@@ -17,8 +17,28 @@ async def list_datasets():
 
 @router.post("/datasets", tags=["datasets"])
 async def upload_dataset(file: UploadFile = File(...)):
-    result = dataset_manager.validate_and_save_dataset(file.filename, file.file.read())
-    return result
+    """
+    Upload and validate a dataset.
+    """
+    # Save the uploaded file temporarily
+    file_path = f"data/{file.filename}"
+    with open(file_path, "wb") as f:
+        f.write(file.file.read())
+
+    # Validate the dataset
+    validation_result = dataset_manager.validate_dataset(file_path)
+
+    if "error" in validation_result:
+        # If validation fails, delete the uploaded file and return the error
+        os.remove(file_path)
+        return {"error": validation_result["error"]}
+
+    # Save and confirm upload success
+    return {
+        "message": f"File '{file.filename}' uploaded and validated successfully.",
+        "validation": validation_result,
+    }
+
 
 # Fine-tuning routes
 @router.post("/fine_tune", tags=["fine-tuning"])
